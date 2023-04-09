@@ -57,7 +57,8 @@ const App: FC = () => {
             arr.push(value.content);
         });
         let users: IUser[];
-        UserService.fetchUsers(arr).then(d => users = d).catch(e => setError(e.message));
+        UserService.fetchUsers(arr).then(d => {users = d; console.log(users)}).catch(e => setError(e.message));
+
     }
 
     return (
