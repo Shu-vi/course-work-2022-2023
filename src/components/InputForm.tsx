@@ -36,9 +36,12 @@ export const InputForm: FC<Props> = ({
                             onInputChange(input, event.target.value);
                         }}
                     />
-                    <Button variant="danger" onClick={() => onInputDelete(input)}>
-                        Удалить
-                    </Button>
+                    {inputs.length > 2 && (
+                        <Button variant="danger" onClick={() => onInputDelete(input)}>
+                            Удалить
+                        </Button>)
+                    }
+
                 </Form.Group>
             ))}
             {inputs.length > 0 && (
