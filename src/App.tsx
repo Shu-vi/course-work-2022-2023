@@ -3,6 +3,7 @@ import {Header} from "./components/Header";
 import {InputForm} from "./components/InputForm";
 import UserService from "./api/UserService";
 import {IUser} from "./models/IUser";
+import MyTable from "./components/MyTable";
 
 interface IInput {
     id: number;
@@ -21,6 +22,7 @@ const App: FC = () => {
         },
     ]);
     const [error, setError] = useState<string>('');
+    const [users, setUsers] = useState<Array<IUser>>([]);
 
     useEffect(() => {
         //@ts-ignore
@@ -29,7 +31,7 @@ const App: FC = () => {
         });
         // @ts-ignore
         VK.Auth.getLoginStatus((r) => {
-            if (r.status == 'unknown'){
+            if (r.status === 'unknown') {
                 //@ts-ignore
                 VK.Auth.login();
             }
@@ -56,9 +58,22 @@ const App: FC = () => {
         inputs.forEach((value) => {
             arr.push(value.content);
         });
-        let users: IUser[];
-        UserService.fetchUsers(arr).then(d => {users = d; console.log(users)}).catch(e => setError(e.message));
-
+        UserService.fetchUsers(arr)
+            .then(data => setUsers(data.map(user => ({
+                id: user.id,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                bdate: user.bdate,
+                city: user.city,
+                country: user.country,
+                deactivated: user.deactivated,
+                personal: user.personal,
+                quotes: user.quotes,
+                schools: user.schools,
+                sex: user.sex,
+                universities: user.universities
+            }))))
+            .catch(e => setError(e.message));
     }
 
     return (
@@ -72,6 +87,7 @@ const App: FC = () => {
                 onCompareClick={handleCompareClick}
                 error={error}
             />
+            <MyTable users={users} title={'Данные пользователей'}/>
         </div>
     );
 };

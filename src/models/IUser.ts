@@ -16,6 +16,5 @@ export interface IUser {
     sex: number;
     first_name: string;
     last_name: string;
-    can_access_closed: boolean;
-    is_closed: boolean;
+    deactivated?: boolean;
 }
