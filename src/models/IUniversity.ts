@@ -4,5 +4,6 @@ export interface IUniversity {
     graduation: number;
     id: number;
     name: string;
-
+    chair_name: string;
+    faculty_name: string;
 }

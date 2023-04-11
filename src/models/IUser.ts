@@ -9,7 +9,6 @@ export interface IUser {
     bdate?: string;
     city?: ICity;
     country?: ICountry;
-    quotes?: string;
     personal?: IPersonal;
     universities?: IUniversity[];
     schools?: ISchool[];

@@ -10,5 +10,4 @@ export interface IPersonal{
     political: number;
     religion: string;
     smoking: number;
-
 }
