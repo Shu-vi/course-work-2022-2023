@@ -2,8 +2,9 @@ import React, {FC, useEffect, useState} from "react";
 import {Header} from "./components/Header";
 import {InputForm} from "./components/InputForm";
 import UserService from "./api/UserService";
-import {IUser} from "./models/IUser";
 import MyTable from "./components/MyTable";
+import {IViewUser} from "./views/IViewUser";
+import {Utils} from "./utils/utils";
 
 interface IInput {
     id: number;
@@ -22,7 +23,7 @@ const App: FC = () => {
         },
     ]);
     const [error, setError] = useState<string>('');
-    const [users, setUsers] = useState<Array<IUser>>([]);
+    const [users, setUsers] = useState<Array<IViewUser>>([]);
 
     useEffect(() => {
         //@ts-ignore
@@ -59,20 +60,7 @@ const App: FC = () => {
             arr.push(value.content);
         });
         UserService.fetchUsers(arr)
-            .then(data => setUsers(data.map(user => ({
-                id: user.id,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                bdate: user.bdate,
-                city: user.city,
-                country: user.country,
-                deactivated: user.deactivated,
-                personal: user.personal,
-                quotes: user.quotes,
-                schools: user.schools,
-                sex: user.sex,
-                universities: user.universities
-            }))))
+            .then(data => setUsers(data.map(user => Utils.userModelToView(user))))
             .catch(e => setError(e.message));
     }
 
