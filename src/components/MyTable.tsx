@@ -1,9 +1,9 @@
 import React, {FC, ReactNode} from "react";
 import {Table} from "react-bootstrap";
-import {IUser} from "../models/IUser";
+import {IViewUser} from "../views/IViewUser";
 
 interface Props {
-    users: IUser[];
+    users: IViewUser[];
     title: string;
 }
 
@@ -27,13 +27,60 @@ const MyTable: FC<Props> = ({title, users}) => {
         const propertyValues = users.map((user) => user[property]);
 
         // Если все значения одинаковы, то это полное совпадение, иначе - различие
-        const isMatching = propertyValues.every(
-            (value, index, array) => value === array[0]
+        const isMatching: boolean = propertyValues.every(
+            (value, index, array) => {
+                return value === array[0];
+            }
         );
+
+        // @ts-ignore
+        if (isMatching && (users[0][property] === undefined || users[0][property] === '')) {
+            return;
+        }
 
         // Создаем ячейки для каждого пользователя
         // @ts-ignore
-        const cells = users.map((user) => <td key={`${user.id}-${property}`}>{JSON.stringify(user[property])}</td>);
+        const cells = users.map((user) => {
+            // @ts-ignore
+            let content = user[property];
+            if (property === 'langs') {
+                return (<td key={`${user.id}-${property}`}>
+                    {user.langs?.map(lang => {
+                            return (<>
+                                {lang} <br/>
+                            </>)
+                        }
+                    )}
+                </td>)
+            } else if (property === 'schools') {
+                return (<td key={`${user.id}-${property}`}>
+                    {user.schools?.map(school => {
+                            return (<>
+                                Город: {school.city} <br/>
+                                Название: {school.name}<br/>
+                                <br/>
+                            </>)
+                        }
+                    )}
+                </td>)
+            } else if(property === 'universities') {
+                return (<td key={`${user.id}-${property}`}>
+                    {user.universities?.map(university => {
+                            return (<>
+                                Город: {university.city} <br/>
+                                Название: {university.name}<br/>
+                                Институт: {university.faculty_name}<br/>
+                                Направление: {university.chair_name}<br/>
+                                <br/>
+                            </>)
+                        }
+                    )}
+                </td>)
+            } else {
+                return (<td key={`${user.id}-${property}`}>{content}</td>);
+            }
+
+        });
 
         // Создаем строку таблицы
         const row = (
