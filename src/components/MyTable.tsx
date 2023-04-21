@@ -46,6 +46,10 @@ const MyTable: FC<Props> = ({users}) => {
         const differenceSchool1 = difference(user1.schools, intersectionUnivers, univerCompareFunc);
         const differenceSchool2 = difference(user2.schools, intersectionUnivers, univerCompareFunc);
 
+        const intersectionGroups = intersection(user1.groups, user2.groups);
+        const differenceGroups1 = difference(user1.groups, intersectionGroups);
+        const differenceGroups2 = difference(user2.groups, intersectionGroups);
+
 
         return (
             <>
@@ -264,6 +268,21 @@ const MyTable: FC<Props> = ({users}) => {
                             </tr>
                         )
                     }
+                    {
+                        (differenceGroups1.length > 0 || differenceGroups2.length > 0) && (
+                            <tr>
+                                <td>Сообщества</td>
+                                <td>{differenceGroups1.map((title: String) => (
+                                    <p key={`${user1.id}-${title}`}>{title}<br/>
+                                    </p>))}
+                                </td>
+                                <td>{differenceGroups2.map((title: String) => (
+                                    <p key={`${user1.id}-${title}`}>{title}<br/>
+                                    </p>))}
+                                </td>
+                            </tr>
+                        )
+                    }
                     </tbody>
                 </Table>
                 {/*-----------------------------------------------------------------------------------------------------------*/}
@@ -422,6 +441,17 @@ const MyTable: FC<Props> = ({users}) => {
                                 </td>
                                 <td>{differenceSchool2.map((school: any) => (
                                     <p key={`${user1.id}-${school.name}`}>Город: {school.city}<br/>Название: {school.name}
+                                    </p>))}
+                                </td>
+                            </tr>
+                        )
+                    }
+                    {
+                        (intersectionGroups.length > 0) && (
+                            <tr>
+                                <td>Сообщества</td>
+                                <td>{intersectionGroups.map((title: any) => (
+                                    <p key={`${user1.id}-${title}`}>{title}<br/>
                                     </p>))}
                                 </td>
                             </tr>
