@@ -34,11 +34,8 @@ export class Utils {
             last_name: user.last_name,
             life_main: user.personal?.life_main,
             sex: user.sex,
-            inspired_by: user.personal?.inspired_by,
-            political: user.personal?.political,
             religion: user.personal?.religion,
             smoking: user.personal?.smoking,
-            people_main: user.personal?.people_main,
             schools: viewSchool,
             universities: viewUniversity
         };
