@@ -17,4 +17,5 @@ export interface IViewUser {
     life_main: number | undefined;
     religion: string | undefined;
     smoking: number | undefined;
+    groups: string[] | undefined;
 }

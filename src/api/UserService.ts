@@ -1,4 +1,5 @@
 import {IUser} from "../models/IUser";
+import {IGroup} from "../models/IGroup";
 
 export default class UserService {
     static fetchUsers(ids: string[]): Promise<Array<IUser>> {
@@ -15,6 +16,25 @@ export default class UserService {
                     reject(new Error('Failed to fetch users'));
                 }
             });
+        });
+    }
+
+    static fetchGroupsByUserId(id: number): Promise<Array<IGroup>> {
+        return new Promise<Array<IGroup>>((resolve, reject) => {
+            //@ts-ignore
+            VK.Api.call('groups.get', {
+                user_id: id,
+                extended: 1,
+                v: process.env.REACT_APP_API_V,
+                fields: "all",
+                count: 50
+            }, (r: any) => {
+                if (r.response.items) {
+                    resolve(r.response.items);
+                } else {
+                    reject(new Error('Failed to fetch groups users'));
+                }
+            })
         });
     }
 }

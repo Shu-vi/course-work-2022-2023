@@ -2,6 +2,7 @@ import {IUser} from "../models/IUser";
 import {IViewUser} from "../views/IViewUser";
 import {IViewSchool} from "../views/IViewSchool";
 import {IViewUniversity} from "../views/IViewUniversity";
+import {IGroup} from "../models/IGroup";
 
 export class Utils {
 
@@ -37,8 +38,13 @@ export class Utils {
             religion: user.personal?.religion,
             smoking: user.personal?.smoking,
             schools: viewSchool,
-            universities: viewUniversity
+            universities: viewUniversity,
+            groups: undefined
         };
         return viewUser;
+    }
+
+    public static groupsModelToView(groups: IGroup[]): string[] {
+        return groups.map(group => group.name);
     }
 }
