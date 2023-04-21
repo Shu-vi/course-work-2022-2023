@@ -4,6 +4,8 @@ import UserService from "./api/UserService";
 import MyTable from "./components/MyTable";
 import {IViewUser} from "./views/IViewUser";
 import {Utils} from "./utils/utils";
+import {IUser} from "./models/IUser";
+import {IGroup} from "./models/IGroup";
 
 interface IInput {
     id: number;
@@ -51,9 +53,18 @@ const App: FC = () => {
             arr.push(value.content);
         });
         UserService.fetchUsers(arr)
-            .then(data => setUsers(data.map(user => {
-                return Utils.userModelToView(user);
-            })))
+            .then((users: IUser[]) => {
+                const userPromises = users.map((user) => {
+                    return UserService.fetchGroupsByUserId(user.id)
+                        .then((groups: IGroup[]) => {
+                            const userView: IViewUser = Utils.userModelToView(user);
+                            userView.groups = Utils.groupsModelToView(groups);
+                            return userView;
+                        })
+                })
+                return Promise.all(userPromises);
+            })
+            .then((userViews: IViewUser[]) => setUsers(userViews))
             .catch(e => setError(e.message));
     }
 
