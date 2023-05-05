@@ -3,27 +3,36 @@ import {IViewUser} from "../views/IViewUser";
 import {IViewSchool} from "../views/IViewSchool";
 import {IViewUniversity} from "../views/IViewUniversity";
 import {IGroup} from "../models/IGroup";
+import UserService from "../api/UserService";
 
 export class Utils {
 
-    public static userModelToView(user: IUser, groups: IGroup[] = []): IViewUser {
+    public static async userModelToView(user: IUser, groups: IGroup[] = []): Promise<IViewUser> {
         const viewSchool: Array<IViewSchool> = [];
         const groupsView = this.groupsModelToView(groups);
-        user.schools?.forEach(value => {
-            viewSchool.push({
-                city: value.city,
-                name: value.name
-            });
-        });
+        if (user.schools) {
+            for (const value of user.schools) {
+                const cities = await UserService.fetchCityById(value.city);
+                const cityTitle = cities[0].title;
+                viewSchool.push({
+                    city: cityTitle,
+                    name: value.name
+                });
+            }
+        }
         const viewUniversity: Array<IViewUniversity> = [];
-        user.universities?.forEach(value => {
-            viewUniversity.push({
-                city: value.city,
-                name: value.name,
-                chair_name: value.chair_name,
-                faculty_name: value.faculty_name
-            });
-        });
+        if (user.universities) {
+            for (const value of user.universities) {
+                const cities = await UserService.fetchCityById(value.city);
+                const cityTitle = cities[0].title;
+                viewUniversity.push({
+                    city: cityTitle,
+                    name: value.name,
+                    chair_name: value.chair_name,
+                    faculty_name: value.faculty_name
+                });
+            }
+        }
         return {
             id: user.id,
             city: user.city?.title,
