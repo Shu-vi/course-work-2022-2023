@@ -6,8 +6,9 @@ import {IGroup} from "../models/IGroup";
 
 export class Utils {
 
-    public static userModelToView(user: IUser): IViewUser {
+    public static userModelToView(user: IUser, groups: IGroup[] = []): IViewUser {
         const viewSchool: Array<IViewSchool> = [];
+        const groupsView = this.groupsModelToView(groups);
         user.schools?.forEach(value => {
             viewSchool.push({
                 city: value.city,
@@ -23,7 +24,7 @@ export class Utils {
                 faculty_name: value.faculty_name
             });
         });
-        const viewUser: IViewUser = {
+        return {
             id: user.id,
             city: user.city?.title,
             country: user.country?.title,
@@ -39,9 +40,8 @@ export class Utils {
             smoking: user.personal?.smoking,
             schools: viewSchool,
             universities: viewUniversity,
-            groups: undefined
+            groups: groupsView
         };
-        return viewUser;
     }
 
     public static groupsModelToView(groups: IGroup[]): string[] {

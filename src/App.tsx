@@ -5,7 +5,6 @@ import MyTable from "./components/MyTable";
 import {IViewUser} from "./views/IViewUser";
 import {Utils} from "./utils/utils";
 import {IUser} from "./models/IUser";
-import {IGroup} from "./models/IGroup";
 import {Modal, Spinner} from "react-bootstrap";
 
 interface IInput {
@@ -30,59 +29,46 @@ const App: FC = () => {
     const [users, setUsers] = useState<Array<IViewUser>>([]);
 
     useEffect(() => {
-        //@ts-ignore
+        // Используйте окружение, чтобы получить ID API VK.
+        // @ts-ignore
         VK.init({
             apiId: process.env.REACT_APP_VK_NUMBER
         });
         // @ts-ignore
         VK.Auth.getLoginStatus((r) => {
+            // Если пользователь не авторизован, откройте окно авторизации VK.
             if (r.status === 'unknown') {
-                //@ts-ignore
+                // @ts-ignore
                 VK.Auth.login();
             }
         });
     }, []);
 
-    function showLoading(): void {
-        setModalVisible(true);
+    function showLoading() {
         setLoading(true);
+        setModalVisible(true);
     }
 
-    function hideLoading(): void {
-        setModalVisible(false);
+    function hideLoading() {
         setLoading(false);
+        setModalVisible(false);
     }
 
-    function handleInputChange(input: IInput, value: string): void {
-        setInputs(
-            inputs.map((i) => (input.id === i.id ? {...i, content: value} : i))
-        );
+    function handleInputChange(input: IInput, value: string) {
+        setInputs(inputs.map((i) => (input.id === i.id ? {...i, content: value} : i)));
     }
 
-    function handleCompareClick(): void {
+    function handleCompareClick() {
         showLoading();
-        let arr: string[];
-        arr = [];
-        inputs.forEach((value) => {
-            arr.push(value.content);
-        });
+        const arr = inputs.map(input => input.content);
         UserService.fetchUsers(arr)
-            .then((users: IUser[]) => {
-                const userPromises = users.map((user) => {
-                    return UserService.fetchGroupsByUserId(user.id)
-                        .then((groups: IGroup[]) => {
-                            const userView: IViewUser = Utils.userModelToView(user);
-                            userView.groups = Utils.groupsModelToView(groups);
-                            return userView;
-                        })
-                })
-                return Promise.all(userPromises);
-            })
+            .then((users: IUser[]) => Promise.all(users.map(user => {
+                return UserService.fetchGroupsByUserId(user.id)
+                    .then(groups => Utils.userModelToView(user, groups))
+            })))
             .then((userViews: IViewUser[]) => setUsers(userViews))
             .catch(e => setError(e.message))
-            .finally(() => {
-                hideLoading();
-            });
+            .finally(() => hideLoading());
     }
 
     return (
@@ -93,21 +79,12 @@ const App: FC = () => {
                 onCompareClick={handleCompareClick}
                 error={error}
             />
-            {
-                loading && (
-                    <Modal show={modalVisible} backdrop="static" keyboard={false}>
-                        <Modal.Body className="d-flex justify-content-center align-items-center">
-                            <Spinner animation="border" role="status">
-                            </Spinner>
-                        </Modal.Body>
-                    </Modal>
-                )
-            }
-            {
-                !loading && (
-                    <MyTable users={users}/>
-                )
-            }
+            <Modal show={modalVisible} centered>
+                <Modal.Body className="d-flex justify-content-center align-items-center">
+                    <Spinner animation="border" role="status" />
+                </Modal.Body>
+            </Modal>
+            {!loading && <MyTable users={users} />}
         </div>
     );
 };
