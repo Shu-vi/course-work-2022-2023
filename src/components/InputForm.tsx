@@ -22,16 +22,16 @@ export const InputForm: FC<Props> = ({
     return (
         <Form style={{marginBottom: '10px'}}>
             {inputs.map((input) => (
-                    <Form.Control
-                        key={input.id}
-                        className="mb-2"
-                        type="email"
-                        placeholder="Введите адрес страницы... Например: id123456789"
-                        value={input.content}
-                        onChange={(event) => {
-                            onInputChange(input, event.target.value);
-                        }}
-                    />
+                <Form.Control
+                    key={input.id}
+                    className="mb-2"
+                    type="email"
+                    placeholder="Введите адрес страницы... Например: id123456789"
+                    value={input.content}
+                    onChange={(event) => {
+                        onInputChange(input, event.target.value);
+                    }}
+                />
             ))}
             {inputs.length > 0 && (
                 <Button variant="success" className="mr-1" onClick={onCompareClick}>
