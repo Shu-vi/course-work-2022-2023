@@ -6,6 +6,7 @@ import {IViewUser} from "./views/IViewUser";
 import {Utils} from "./utils/utils";
 import {IUser} from "./models/IUser";
 import {IGroup} from "./models/IGroup";
+import {Modal, Spinner} from "react-bootstrap";
 
 interface IInput {
     id: number;
@@ -13,6 +14,8 @@ interface IInput {
 }
 
 const App: FC = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [inputs, setInputs] = useState<IInput[]>([
         {
             id: Date.now(),
@@ -40,6 +43,16 @@ const App: FC = () => {
         });
     }, []);
 
+    function showLoading(): void {
+        setModalVisible(true);
+        setLoading(true);
+    }
+
+    function hideLoading(): void {
+        setModalVisible(false);
+        setLoading(false);
+    }
+
     function handleInputChange(input: IInput, value: string): void {
         setInputs(
             inputs.map((i) => (input.id === i.id ? {...i, content: value} : i))
@@ -47,6 +60,7 @@ const App: FC = () => {
     }
 
     function handleCompareClick(): void {
+        showLoading();
         let arr: string[];
         arr = [];
         inputs.forEach((value) => {
@@ -65,7 +79,10 @@ const App: FC = () => {
                 return Promise.all(userPromises);
             })
             .then((userViews: IViewUser[]) => setUsers(userViews))
-            .catch(e => setError(e.message));
+            .catch(e => setError(e.message))
+            .finally(() => {
+                hideLoading();
+            });
     }
 
     return (
@@ -76,7 +93,21 @@ const App: FC = () => {
                 onCompareClick={handleCompareClick}
                 error={error}
             />
-            <MyTable users={users}/>
+            {
+                loading && (
+                    <Modal show={modalVisible} backdrop="static" keyboard={false}>
+                        <Modal.Body className="d-flex justify-content-center align-items-center">
+                            <Spinner animation="border" role="status">
+                            </Spinner>
+                        </Modal.Body>
+                    </Modal>
+                )
+            }
+            {
+                !loading && (
+                    <MyTable users={users}/>
+                )
+            }
         </div>
     );
 };
