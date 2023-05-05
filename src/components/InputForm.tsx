@@ -9,8 +9,6 @@ interface IInput {
 interface Props {
     inputs: IInput[];
     onInputChange: (input: IInput, value: string) => void;
-    // onInputDelete?: (input: IInput) => void;
-    // onInputAdd?: () => void;
     onCompareClick: () => void;
     error: string;
 }
@@ -18,13 +16,11 @@ interface Props {
 export const InputForm: FC<Props> = ({
                                          inputs,
                                          onInputChange,
-                                         // onInputDelete,
-                                         // onInputAdd,
                                          onCompareClick,
                                          error
                                      }) => {
     return (
-        <Form>
+        <Form style={{marginBottom: '10px'}}>
             {inputs.map((input) => (
                     <Form.Control
                         key={input.id}
