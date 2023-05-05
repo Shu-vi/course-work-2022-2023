@@ -16,4 +16,5 @@ export interface IUser {
     first_name: string;
     last_name: string;
     deactivated?: boolean;
+    can_access_closed: boolean;
 }
