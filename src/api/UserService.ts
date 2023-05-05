@@ -26,8 +26,7 @@ export default class UserService {
                 user_id: id,
                 extended: 1,
                 v: process.env.REACT_APP_API_V,
-                fields: "all",
-                count: 50
+                fields: "all"
             }, (r: any) => {
                 if (r.response.items) {
                     resolve(r.response.items);
