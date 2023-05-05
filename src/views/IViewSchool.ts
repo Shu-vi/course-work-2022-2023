@@ -1,5 +1,5 @@
 
 export interface IViewSchool {
-    city: number;
+    city: string;
     name: string;
 }
