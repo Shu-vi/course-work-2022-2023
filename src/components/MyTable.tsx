@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from "react";
+import React, {FC} from "react";
 import {Table} from "react-bootstrap";
 import {IViewUser} from "../views/IViewUser";
 import {IViewUniversity} from "../views/IViewUniversity";
