@@ -13,7 +13,6 @@ const MyTable: FC<Props> = ({users}) => {
             return null;
         }
         const [user1, user2] = users;
-
         function intersection(arr1: any = [], arr2: any = [], compareFunc = (a: any, b: any): boolean => a === b) {
             return arr1.filter((item1: any) => arr2.some((item2: any) => compareFunc(item1, item2)));
         }
@@ -242,12 +241,12 @@ const MyTable: FC<Props> = ({users}) => {
                                 <td>Университет</td>
                                 <td>{differenceUnivers1.map((univer: any) => (
                                     <p key={`${user1.id}-univer`}>Город: {univer.city}<br/>Название: {univer.name}<br/>
-                                        Направление: {univer.chair_name}<br/>Институт: {univer.faculty_name}
+                                        Направление: {univer.chair_name ? univer.chair_name : 'неизвестно'}<br/>Институт: {univer.faculty_name ? univer.faculty_name : 'неизвестно'}
                                     </p>
                                 ))}</td>
                                 <td>{differenceUnivers2.map((univer: any) => (
                                     <p key={`${user2.id}-univer`}>Город: {univer.city}<br/>Название: {univer.name}<br/>
-                                        Направление: {univer.chair_name}<br/>Институт: {univer.faculty_name}
+                                        Направление: {univer.chair_name ? univer.chair_name : 'неизвестно'}<br/>Институт: {univer.faculty_name ? univer.faculty_name : 'неизвестно'}
                                     </p>
                                 ))}</td>
                             </tr>
@@ -426,7 +425,7 @@ const MyTable: FC<Props> = ({users}) => {
                                 <td>Университет</td>
                                 <td>{intersectionUnivers.map((univer: any) => (
                                     <p key={`${user1.id}-univer`}>Город: {univer.city}<br/>Название: {univer.name}<br/>
-                                        Направление: {univer.chair_name}<br/>Институт: {univer.faculty_name}
+                                        Направление: {univer.chair_name ? univer.chair_name : 'неизвестно'}<br/>Институт: {univer.faculty_name ? univer.faculty_name : 'неизвестно'}
                                     </p>))}</td>
                             </tr>
                         )
