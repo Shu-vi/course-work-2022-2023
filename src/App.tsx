@@ -54,18 +54,41 @@ const App: FC = () => {
         setModalVisible(false);
     }
 
+    function clearPage() {
+        setUsers([]);
+        setError('');
+    }
+
     function handleInputChange(input: IInput, value: string) {
         setInputs(inputs.map((i) => (input.id === i.id ? {...i, content: value} : i)));
     }
 
     function handleCompareClick() {
+        clearPage();
+        if (inputs[0].content === '' || inputs[1].content === '') {
+            setError('Все поля обязательны для заполнения');
+            return;
+        }
         showLoading();
         const arr = inputs.map(input => input.content);
         UserService.fetchUsers(arr)
-            .then((users: IUser[]) => Promise.all(users.map(user => {
-                return UserService.fetchGroupsByUserId(user.id)
-                    .then(groups => Utils.userModelToView(user, groups))
-            })))
+            .then((users: IUser[]) => {
+                if (users.length < 2) {
+                    throw new Error('Произошла ошибка. Проверьте корректность введённых данных и попробуйте снова');
+                }
+                users.forEach((user) => {
+                    if (user.deactivated) {
+
+                    }
+                    if (!user.can_access_closed) {
+                        throw new Error(`Профиль пользователя ${user.first_name} ${user.last_name} с id ${user.id} является закрытым. Невозможно проанализировать.`);
+                    }
+                })
+                return Promise.all(users.map(user => {
+                    return UserService.fetchGroupsByUserId(user.id)
+                        .then(groups => Utils.userModelToView(user, groups))
+                }))
+            })
             .then((userViews: IViewUser[]) => setUsers(userViews))
             .catch(e => setError(e.message))
             .finally(() => hideLoading());
@@ -81,10 +104,10 @@ const App: FC = () => {
             />
             <Modal show={modalVisible} centered>
                 <Modal.Body className="d-flex justify-content-center align-items-center">
-                    <Spinner animation="border" role="status" />
+                    <Spinner animation="border" role="status"/>
                 </Modal.Body>
             </Modal>
-            {!loading && <MyTable users={users} />}
+            {!loading && <MyTable users={users}/>}
         </div>
     );
 };
