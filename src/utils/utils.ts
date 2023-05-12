@@ -4,10 +4,11 @@ import {IViewSchool} from "../views/IViewSchool";
 import {IViewUniversity} from "../views/IViewUniversity";
 import {IGroup} from "../models/IGroup";
 import UserService from "../api/UserService";
+import {IViewWallPost} from "../views/IViewWallPost";
 
 export class Utils {
 
-    public static async userModelToView(user: IUser, groups: IGroup[] = []): Promise<IViewUser> {
+    public static async userModelToView(user: IUser, groups: IGroup[] = [], posts: IViewWallPost[] = []): Promise<IViewUser> {
         const viewSchool: Array<IViewSchool> = [];
         const groupsView = this.groupsModelToView(groups);
         if (user.schools) {
@@ -33,6 +34,15 @@ export class Utils {
                 });
             }
         }
+        const postsView = posts.map(post => {
+            return {
+                id: post.id,
+                from_id: post.from_id,
+                likes: {
+                    count: post.likes.count
+                }
+            }
+        })
         return {
             id: user.id,
             city: user.city?.title,
@@ -49,7 +59,8 @@ export class Utils {
             smoking: user.personal?.smoking,
             schools: viewSchool,
             universities: viewUniversity,
-            groups: groupsView
+            groups: groupsView,
+            posts: postsView
         };
     }
 

@@ -1,5 +1,6 @@
 import {IViewSchool} from "./IViewSchool";
 import {IViewUniversity} from "./IViewUniversity";
+import {IViewWallPost} from "./IViewWallPost";
 
 export interface IViewUser {
     id: number;
@@ -18,4 +19,5 @@ export interface IViewUser {
     religion: string | undefined;
     smoking: number | undefined;
     groups: string[] | undefined;
+    posts: IViewWallPost[];
 }

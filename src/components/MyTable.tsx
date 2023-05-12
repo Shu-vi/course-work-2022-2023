@@ -50,7 +50,6 @@ const MyTable: FC<Props> = ({users}) => {
     const differenceGroups1 = difference(user1.groups, intersectionGroups);
     const differenceGroups2 = difference(user2.groups, intersectionGroups);
 
-
     return (
         <>
             <Table striped bordered hover responsive>

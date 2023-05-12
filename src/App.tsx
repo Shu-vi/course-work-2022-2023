@@ -6,6 +6,7 @@ import {IViewUser} from "./views/IViewUser";
 import {Utils} from "./utils/utils";
 import {IUser} from "./models/IUser";
 import {Modal, Spinner} from "react-bootstrap";
+import MyTabs from "./components/MyTabs";
 
 interface IInput {
     id: number;
@@ -78,20 +79,24 @@ const App: FC = () => {
                 }
                 users.forEach((user) => {
                     if (user.deactivated) {
-
+                        throw new Error(`Профиль пользователя с id ${user.id} удалён или ещё не создан`)
                     }
                     if (!user.can_access_closed) {
                         throw new Error(`Профиль пользователя ${user.first_name} ${user.last_name} с id ${user.id} является закрытым. Невозможно проанализировать.`);
                     }
                 })
                 return Promise.all(users.map(user => {
-                    return UserService.fetchGroupsByUserId(user.id)
-                        .then(groups => Utils.userModelToView(user, groups))
+                    return Promise.all([
+                        UserService.fetchGroupsByUserId(user.id),
+                        UserService.fetchPostsByUserId(user.id)
+                    ])
+                        .then(([groups, posts]) => Utils.userModelToView(user, groups, posts))
                 }))
             })
             .then((userViews: IViewUser[]) => setUsers(userViews))
             .catch(e => setError(e.message))
             .finally(() => hideLoading());
+
     }
 
     return (
@@ -108,6 +113,7 @@ const App: FC = () => {
                 </Modal.Body>
             </Modal>
             {!loading && <MyTable users={users}/>}
+            {!loading && <MyTabs users={users}/>}
         </div>
     );
 };
