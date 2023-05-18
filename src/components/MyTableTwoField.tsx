@@ -8,7 +8,7 @@ interface Props {
     users: IViewUser[];
 }
 
-const MyTable: FC<Props> = ({users}) => {
+const MyTableTwoField: FC<Props> = ({users}) => {
     if (!users.length) {
         return null;
     }
@@ -462,4 +462,4 @@ const MyTable: FC<Props> = ({users}) => {
     );
 };
 
-export default MyTable;
+export default MyTableTwoField;

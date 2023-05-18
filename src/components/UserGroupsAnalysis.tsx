@@ -16,7 +16,6 @@ export const UserGroupsAnalysis: FC<Props> = ({user}) => {
         if (user.groups && user.groups.length > 0) {
             Promise.all(user.groups.map(group => NnService.classifyText(group)))
                 .then(labels => {
-                    console.log(labels)
                     const uniqueLabels = Array.from(new Set(labels));
                     setLabels(uniqueLabels);
                 });

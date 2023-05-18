@@ -15,7 +15,7 @@ export default class UserService {
                 if (r.response) {
                     resolve(r.response);
                 } else {
-                    reject(new Error('Failed to fetch users'));
+                    reject(new Error('Ошибка при запросе к серверу вконтакте. Не удалось получить список пользователей'));
                 }
             });
         });
@@ -33,7 +33,7 @@ export default class UserService {
                 if (r.response.items) {
                     resolve(r.response.items);
                 } else {
-                    reject(new Error('Failed to fetch groups users'));
+                    reject(new Error('Ошибка при запросе к серверу вконтакте. Не удалось получить список групп'));
                 }
             })
         });
@@ -49,13 +49,14 @@ export default class UserService {
                 if (r.response.items) {
                     resolve(r.response.items);
                 } else {
-                    reject(new Error('Failed to fetch posts users'));
+                    reject(new Error('Ошибка при запросе к серверу вконтакте. Не удалось получить список постов'));
                 }
             })
         });
     }
 
     static fetchCityById(id: number): Promise<Array<ICity>>{
+        console.log(id)
         return new Promise<Array<ICity>>((resolve, reject) => {
             //@ts-ignore
             VK.Api.call('database.getCitiesById', {
@@ -65,7 +66,7 @@ export default class UserService {
                 if (r.response) {
                     resolve(r.response);
                 } else {
-                    reject(new Error('Failed to fetch city'));
+                    reject(new Error('Ошибка при запросе к серверу вконтакте. Не удалось получить город'));
                 }
             })
         });

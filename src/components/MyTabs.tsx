@@ -37,13 +37,13 @@ const MyTabs: FC<Props> = ({users}) => {
             <Tab eventKey="groups" title="Анализ сообществ">
                 <div className="border-3 border p-3 mb-3">
                     <div>
-                        {user1.first_name} {user1.last_name}:
+                        На основе групп, в которых состоит {user1.first_name} {user1.last_name}, можно сделать предположение, что его интересуют следующие тематики:
                     </div>
                     <UserGroupsAnalysis user={user1}/>
                 </div>
                 <div className="border-3 border p-3 mb-5">
                     <div>
-                        {user2.first_name} {user2.last_name}:
+                        На основе групп, в которых состоит {user2.first_name} {user2.last_name}, можно сделать предположение, что его интересуют следующие тематики:
                     </div>
                     <UserGroupsAnalysis user={user2}/>
                 </div>
