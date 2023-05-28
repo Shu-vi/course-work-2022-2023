@@ -143,6 +143,13 @@ const App: FC = () => {
 
     return (
         <div className='container'>
+
+            {
+                inputs.length === 1?
+                    (<p className="h3 mt-2 mb-4">Анализ профиля Вконтакте</p>)
+                    :
+                    (<p className="h3 mt-2 mb-4">Сравнение пользователей Вконтакте</p>)
+            }
             <InputForm
                 inputs={inputs}
                 onInputChange={handleInputChange}
@@ -157,7 +164,7 @@ const App: FC = () => {
                 </Modal.Body>
             </Modal>
             {
-                (!loading && inputs.length === 1)?
+                (!loading && inputs.length === 1) ?
                     <>
                         <MyTableOneField users={users}/>
                         <MyTabsTwoField users={users}/>
